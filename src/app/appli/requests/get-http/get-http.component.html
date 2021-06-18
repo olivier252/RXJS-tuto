@@ -1,0 +1,302 @@
+<h1>Requêtes GET</h1>
+
+<p><code>HttpClient.get()</code> récupère des données depuis un serveur. La méthode est asynchrone et retourne un
+  observable qui émet les données demandées lorsque
+  la réponse est reçue. Le type de retour varie selon les valeurs fournies dans l'appel : responseType et observe
+  sont des propriétés optionnelles
+  de l'objet option.
+</p>
+
+<ul class="list-group">
+  <li class="list-group-item">L’option observe spécifie la quantité de réponse à renvoyer.</li>
+  <li class="list-group-item">L’option responseType spécifie le format de retour des données.</li>
+</ul>
+<p>On structure la requête <code>HttpClient</code> pour déclarer le type d’objet réponse (HttpResponse &lt;Objet&gt;),
+  pour rendre la consommation de la sortie plus
+  facile et plus évidente. Spécifier le type de réponse agit comme une assertion de type au moment de la compilation.
+</p>
+
+<p>Pour définir le type de réponse, on définit une interface avec les propriétés requises. Il vaut mieux utiliser une
+  interface plutôt qu'une classe,
+  car la réponse est un objet simple qui ne peut pas être converti en une instance de classe.
+</p>
+<img src="assets/images/requests/interface.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Il faut ensuite spécifier cette interface comme paramètre de type de la méthode get().</p>
+<figure>
+  <img src="assets/images/requests/headersRequet.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption>Ici on spécifie que notre requête envoie des données au format <code>Json</code>. elle fournit églement un
+    jeton d'identification.</figcaption>
+</figure>
+
+<p>Le callback dans la méthode du composant updaté reçoit du coup un objet typé qu'il est facile de consommer</p>
+<img src="assets/images/requests/data.png" alt="" srcset="" class="mb-3 img-fluid">
+
+
+<h2>Paramètres optionnels</h2>
+<h3>observe Response</h3>
+
+<p>Note : nous n'abordons pas le cas des évènement dans l'option observe, seul la valeur de retour 'response' est
+  utilisée ici.
+  La valeur 'body' est celle utilisée par défaut et n'est pas précisée dans les paramètres de requête.
+</p>
+
+<p>On peut facilement obtenir la réponse complète une requête HTTP en utilisant l'option "observe", si l'on souhaite
+  obtenir davantage d'informations
+  sur la transaction que le contenu du corps de requête. Quelquefois les serveurs retournent des headers spéciaux ou des
+  codes de statut pour fournir certaines
+  conditions importantes pour l'application.
+</p>
+<img src="assets/images/requests/getobserve.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Requête avec la propriété optionnelle observe, on remarque au passage le typage fort avec le paramètre de type
+  &lt;Objet&gt; passé à <code>get()</code></p>
+<p>On s'abonne dans notre composant à la requête, en sortie du callback, nous obtenons un objet HttpRequest qui permet
+  de récupérer le contenu de la requête dans son
+  intégralité : headers et corps.</p>
+
+<ul class="list-group">
+  <p>Affichons la liste des headers</p>
+  <li *ngFor="let k of keys" class="list-group-item">- {{ k }}</li>
+</ul>
+
+<p>Puis le corps de la requête avec sa liste d'objets de type Person</p>
+<ul class="list-group">
+  <li *ngFor="let p of personObserve" class="list-group-item">- {{ p.id }}: {{ p.name }}</li>
+</ul>
+
+<p>Voici la souscription dans notre modèle :</p>
+<img src="assets/images/requests/showrequest.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<hr>
+
+
+<h1>Les paramètres de route</h1>
+<h2 class="m-4">Passer des paramètres de route</h2>
+
+<p>Il existe de nombreux scénarios, où l'on doit utiliser les paramètres de route en les passant dans les routes de
+  notre
+  application. Par exemple, pour accéder à la vue détaillée de la personne, nous devons passer l’ID de la personne, afin
+  que le composant puisse le récupérer et l’afficher à
+  l’utilisateur.
+</p><br>
+
+<p>Pour ce type de scénario très répandu, il faut procéder comme ceci : </p>
+<ul>
+  <li>Définissons la route de la personne à afficher dans le routing.module qui pour rappel est un objet très simple :
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/div/model.png" alt="" srcset="" class="mb-3 img-fluid">
+      <figcaption>L'objet <code>Person</code> réduit à sa plus simpe expression !</figcaption>
+    </figure>
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/requests/route4.png" alt="" srcset="" class="mb-3 img-fluid">
+      <figcaption>Définition de la route pour accéder une personne représentée par une ligne de notre table.
+      </figcaption>
+    </figure>
+  </li>
+  <li>Il faut ensuite fournir la directive path et <code>routerLink</code>. On ajoute l'Id du modèle
+    <code>Person</code> dans le tableau de paramètres de <code>routerLink</code>:
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/requests/route5.png" alt="" srcset="" class="mb-3 img-fluid">
+    </figure>
+  </li>
+  <li>Il faut récupérer ce paramètre de route dans le composant affichant le détail de la personne, c'est ici que le
+    service <code>activatedRoute</code> intervient.
+    Toutes ces étapes sont décrites ci-dessous.
+  </li>
+</ul>
+
+
+<!-- //PARAM ROUTES_______________________________________________________________________________ -->
+
+<h2 class="mb-4">Récupérer des paramètres de route</h2>
+
+<p>Nous devons d'abord injecter <code>ActivatedRoute</code> dans le constructeur du composant/service, où nous voulons
+  lire le paramètre de requête comme indiqué ci-dessous</p>
+<figure>
+  <img src="assets/images/requests/activatedRoute.png" alt="" srcset="" class="mb-3 img-fluid">
+</figure>
+
+<p>Il y a 2 façons d’utiliser le service <code>ActivatedRoute</code> pour obtenir la valeur des paramètres de route à
+  partir de l’objet <code>paramMap</code>.</p>
+<p>On peut utiliser <code>snapshot</code> et aussi l'observable <code>paramMap</code> qui contient une map des
+  paramètres de
+  routes disponibles pour la route courante. Nous pouvons l’utiliser pour récupérer des valeurs à partir du
+  paramètre de requête. L'objet <code>paramMap</code> est accessible via <code>ActivatedRoute</code></p>
+<p>Il est alors très facile de récupérer les paramètres grâce aux méthodes <code>get()</code> et
+  <code>getAll()</code>
+</p><br>
+<ul>
+  <li>Utiliser <code>snapshot</code>
+    <figure>
+      <img src="assets/images/requests/snapshot.png" alt="" srcset="" class="mb-3 img-fluid">
+    </figure>
+    <figcaption>Attention toutefois, la propriété <code>snapshot</code> retourne la valeur initiale seulement et ne
+      tiendra pas compte des changements ultérieurs des paramètres (ici l'Id) sur la page, c'est pourquoi il est
+      préférable de recourir à
+      l'observable <code>paramMap</code> qui enregistrera le flux d'évènements dans le temps.</figcaption>
+  </li>
+  <li>Utiliser l'observable
+    <figure>
+      <img src="assets/images/requests/mapParam.png" alt="" srcset="" class="mb-3 img-fluid">
+    </figure>
+    <figcaption>Nous souscrivons à l'observable <code>paramMap</code>. On peut alors utiliser la méthode
+      <code>get</code> pour lire le
+      paramètre de requête comme illustré ci-dessous.<code>Person</code>
+    </figcaption>
+    <p>Il est préférable d'utiliser l'observable car nous récupérons habituellement la valeur dans le life cycle hook
+      <code>ngOnInit()</code> quand le composant est initialisé.
+    </p>
+    <p>En effet, Lorsque l’utilisateur navigue à nouveau vers le composant, angular ne crée pas de nouveau composant
+      mais réutilise l’instance existante. Dans de telles circonstances, la méthode <code>ngOnInit()</code> du composant
+      n’est pas
+      appelée à nouveau. Par conséquent, l'observable <code>paramMap</code> est un bon moyen pour récupérer la dernière
+      valeur du paramètre ainsi que d'acutaliser le composant.</p>
+  </li>
+</ul>
+<li class="mb-2">- On peut utiliser la méthode <code>navigate</code> du service <code>Router</code> :</li>
+<figure>
+  <img src="assets/images/requests/queryParams5.png" alt="" srcset="" class="mb-3 img-fluid">
+</figure>
+
+<!-- //PARAM REQUETE_______________________________________________________________________________ -->
+<h2 class="mb-4">Passer des paramètres de requête</h2>
+
+<p>On peut naviguer de 2 façons : </p>
+<ul>
+  <li class="mb-2">En utilisant la directive <code>queryParams</code> pour ajouter les paramètres de requête. il faut
+    utiliser conjointement la directive <code>routerLink</code> comme ceci : </li>
+  <figure>
+    <img src="assets/images/requests/queryParams4.png" alt="" srcset="" class="mb-3 img-fluid">
+  </figure>
+  <li class="mb-2">On peut utiliser la méthode <code>navigate</code> du service <code>Router</code> :</li>
+  <figure>
+    <img src="assets/images/requests/queryParams5.png" alt="" srcset="" class="mb-3 img-fluid">
+  </figure>
+</ul>
+
+<h3 class="mb-4">A propos du service <code>ActivatedRoute</code></h3>
+
+<ul class="list-group">
+  <li class="list-group-item">url : Cette propriété retourne un tableau d’objets Segment d’URL, chacun d’eux décrivant
+    un seul segment de l’URL correspondant à la route courante.</li>
+  <li class="list-group-item">queryParams : Cette propriété retourne un objet Params, qui décrit les paramètres de
+    requête de l’URL, indexés par nom.</li>
+  <li class="list-group-item">fragment : cette propriété retourne une chaîne contenant le fragment d’URL.</li>
+  <li class="list-group-item">Snapshot : instantané initial de la route.</li>
+  <li class="list-group-item">L’option observe spécifie la quantité de réponse à renvoyer.</li>
+  <li class="list-group-item">L’option observe spécifie la quantité de réponse à renvoyer.</li>
+  <li class="list-group-item">L’option observe spécifie la quantité de réponse à renvoyer.</li>
+  <li class="list-group-item">L’option responseType spécifie le format de retour des données.</li>
+</ul>
+
+<h1 class="mb-4 mt-5">Les paramètres de requête</h1>
+<h2 class="mb-4">Passer des paramètres de requête dans les routes</h2>
+
+<p>Nous allons voir comment passer et accéder aux paramètres optionnels ou de requête dans Angular. Les paramètres de
+  requête
+  permettent de passer des paramètres optionnels. Observons
+  comment passer les paramètres de requête en utilisant la directive <code>queryParams</code>. Nous examinons ensuite
+  comment
+  récupérer le paramètre dans le composant à l’aide du service <code>ActivatedRoute</code>.</p>
+
+<h2 class="m-4">Les paramètres d'url ou les paramètres de requête</h2>
+
+<p>Les requêtes HTTP comportent parfois des query params ou paramètres de requête à ajouter à l'url. Ce sont les données
+  envoyées au serveur via l'url, le plus souvent dans les requêtes get
+  en passant ces données au format clé=valeur après un "?". Chaque méthode accepte un objet options
+  en paramètre optionnel, où l'on peut configurer la requête pour lui passer des paramètres.
+</p>
+
+<p>Les API Rest possèdent un ensemble de paramètres qui nous permet de spécifier comment nous voulons trier, calculer le
+  nombre de données par page, ou décider de quelle page afficher dans notre application.</p>
+
+<img src="assets/images/requests/param1.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>La requête ci-dessus retourne le résultat trié sur la description et récupère uniquement la première page. La chaîne
+  <code>sort=description&page=2</code> après le <code>?</code> représente les paramètres de l'URL ou encore les Query
+  strings /paramètres de requêtes. Le point d’interrogation est utilisé comme séparateur.
+</p><br>
+<p>Il faut retenir que ces paramètres de requêtes permettent de faire passer des paramètres optionnels par n'importe
+  quelle route dans l'application. A ce propos, il est important de bien différencier les paramètres de requête des
+  paramètres de route.</p><br>
+
+<p>Les premiers sont optionnels et la navigation n'est pas empêchée, tandis que les paramètres de route sont nécessaires
+  et sont utilisés par Angular Router pour définir la route. Les paramètres de requête ne font pas partie de la route.
+  Par conséquent, il ne faut pas les définir dans le tableau de routes comme les paramètres de route. Nous pouvons les
+  ajouter en utilisant la directive <code>routerLink</code> ou via la méthode <code>router.navigate</code>.</p><br>
+
+<p>Les paramètres de requête ne faisant pas partie de la route de l'url, il ne faut pas les ajouter dans le tableau de
+  routes comme les paramètres de route, mais en utilisant la directive <code>routerLink</code> ou la méthode
+  <code>router.navigate</code>.
+</p>
+
+<p>Il faut utiliser la directive <code>queryParams</code> avec la directive <code>routerLink</code> pour ajouter les
+  query params.
+  comme indiqué ci-dessous</p>
+
+<figure class="mt-4 mb-3">
+  <img src="assets/images/requests/route111.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption></figcaption>
+</figure>
+
+<p>Il est possible aussi de naviguer programmatiquement en utilisant la méthode <code>navigate</code> de navigation du
+  service <code>Router</code> comme indiqué ci-dessous</p>
+
+<figure class="mt-4 mb-3">
+  <img src="assets/images/requests/queryparams.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption></figcaption>
+</figure>
+
+<h3 class="mt-4 mb-3">L'observable <code>queryParamsMap</code></h3>
+
+<p><code>queryParamsMap</code> est un observable qui contient une map des paramètres de requête de la route courante. Il
+  retourne un observable de type ParamMap (qui est une interface).
+  <code>queryParamsMap</code> est accessible avec le service <code>ActivatedRoute</code>, on y souscrit comme ceci :
+</p>
+
+<figure class="mt-4 mb-3">
+  <img src="assets/images/requests/queryparams22.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption></figcaption>
+</figure>
+
+<p>A noter que l'on peut utiliser la propriété <code>snapshot</code>, mais attention, tout comme nous l'avons vu avec
+  les paramètres de route, le lifecycle hook <code>ngOnInit()</code> du composant
+  n’est appelé qu'une seule fois lorsque l'on utilise la propriété <code>snapshot</code>. Par conséquent il ne sera pas
+  possible de récupérer d'autres valeurs des query params lors de la navigation dans le composant.</p>
+
+<h3 class="mt-4 mb-3">queryParamsHandling</h3>
+
+<p>Les paramètres de requêtes sont perdus lorsque l'utilisateur navigue vers une autre route. C'est le comportement par
+  défaut. Par exemple, si l’utilisateur navigue vers la page des produits avec la route
+  <code>/produit?pageNum=2</code> puis qu'il navigue ensuite vers la page de détail du produit, angular supprimera
+  les paramètres de requête de l’url.
+</p>
+
+<p>Il est possible de modifier ce comportement en configurant la stratégie <code>queryParamsHandling</code>. Cette
+  stratégie de configuration détermine comment le routeur Angular gère les paramètres de requête lorsque l’utilisateur
+  navigue hors de la route actuelle. Il a 3 options :</p>
+
+<ul class="list-group">
+  <li class="list-group-item"><code>null</code> : option par défaut, Angular supprime les paramètres de requête lorsque
+    l’utilisateur
+    navigue vers une autre url.
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/requests/queryparamshandling.png" alt="" srcset="" class="mb-3 img-fluid">
+      <figcaption></figcaption>
+    </figure>
+  </li>
+  <li class="list-group-item"><code>preserve</code> : conserve ou reporte le paramètre de requête de la route courante à
+    la navigation suivante. Tous les paramètres de requête de la route suivante sont rejetés.
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/requests/preserve.png" alt="" srcset="" class="mb-3 img-fluid">
+      <figcaption></figcaption>
+    </figure>
+  </li>
+  <li class="list-group-item"><code>merge</code> : dans ce cas le router Angular fusionne les paramètres de requête de
+    l’itinéraire courant avec celui de l’itinéraire suivant avant de naviguer vers l’itinéraire.
+    <figure class="mt-4 mb-3">
+      <img src="assets/images/requests/preserve.png" alt="" srcset="" class="mb-3 img-fluid">
+      <figcaption></figcaption>
+    </figure></li>
+</ul>

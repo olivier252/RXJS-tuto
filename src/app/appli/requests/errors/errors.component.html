@@ -1,0 +1,31 @@
+<h1>La gestion d'erreurs</h1>
+
+<p>Il faut donner des informations utiles à l'utilisateur en cas d'échec d'accès aux données. Il existe 2 types d'erreur :</p>
+
+<ul class="list-group">
+    <li class="list-group-item">Le serveur backend peut rejeter la requête en retournant une réponse 404 ou 500 (response errors).</li>
+    <li class="list-group-item">Un prolème côté client comme une erreur réseau qui empĉhe la requête de se terminer correctement ou une exception lancée
+         dans un opérateur RxJS. Ces s produisent des objets de type ErrorEvent.
+    </li>
+</ul>
+
+<p>HttpClient capture ces 2 types d'erreur grâce à sa classe HttpErrorResponse.</p>
+
+<table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nom</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of personTemplate">
+        <td>{{person.id}}</td>
+        <td>{{person.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="boolMessage">Affiche l'erreur suivante : {{ errorMessage }}</p>
+
+  <img src="assets/images/errors/error1.png" alt="" srcset="" class="mb-3 img-fluid">

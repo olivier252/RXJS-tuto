@@ -1,0 +1,46 @@
+<p>Angular et un framework Javascript complet qui permet de développer une application web dynamique.</p>
+
+<h3>Ce que l'on peut faire avec Angular</h3>
+
+<ul class="list-group mb-3">
+    <li  class="list-group-item">- Single Page Application (SPA) : le navigateur du client exécute le code JS et fait tourner l'application de façon dynamique, et ce, sur une seule page web.</li>
+    <li  class="list-group-item">- Développer des applications hybrides pour smartphone avec Ionic 4 ou encore Angular for NativeScript.</li>
+    <li  class="list-group-item">- Progressive Web App (PWA) : applications de bureau ou smartphone qui se basent sur une URL pour être installées.</li>
+    <li  class="list-group-item">- Créer des composants  web qui peuvent être utilisés dans n'importe quelle techno front.</li>
+</ul>
+
+<h3>Les technologies Angular</h3>
+
+<ul class="list-group mb-3">
+    <li  class="list-group-item">- Angular Universal et le Sever Side Rendering.</li>
+    <li  class="list-group-item">- Angular elements, les composants web réutilisables.</li>
+    <li  class="list-group-item">- Le Lazyloading :  une partie d'un projet seulement se charge quand l'utilisateur veut y accéder, indispensable pour 
+        réduire le temps de chargement.
+    </li>
+    <li  class="list-group-item">- Modules ou packages Angular qui fournissent une boite à outil très complète pour le développeur. Les principaux :
+        formulaires, routing, HTTP, tests…</li>
+    <li  class="list-group-item">- Angular-CLI : permet d'utiliser pléthore de commandes pour optimiser le développement.</li>
+
+    <li  class="list-group-item">- Une documentation très fournie : <a href="https://angular.io/">angular.io</a></li>
+</ul>
+<p>  déclarer tous les composants que l'on a besoin d'utiliser       
+    *importer d'autres modules provenant de son propre projet ou provenant de sources externes comme celui d'un package npm (dossier /node_modules du projet)  
+            ici on importe le package BrowserModule, car Angular va s'exécuter dans un navigateur  
+    *3      indiquer ici les composants web qui doivent être accessibles lors d'un import de ce module         
+    *4      c'est ici qu'on déclare nos services pour qu'ils soient disponibles dans nos composants 
+    **5     uniquement présent dans le module racine.
+              - Dans 'bootstrap', on doit indiquer quel composant est le point d'entrée 
+              - rappel:  app.component.ts est le 1er composant projeté dans la balise : app-root app-root du fichier: index.html</p>
+
+              <p>En JS un objet n'est pas forcement une instance de classe !
+                Les interfaces sont des contrats. Une interface définit ce qui se trouve à l’intérieur d’un objet (encore une fois… pas une instance d’une classe).
+                 Lorsque vous définissez votre interface Vous dites que tout objet donné dans ce contrat doit être un objet contenant 2 propriétés qui sont spécifiquement appelées « a » et « b » et qui sont respectivement un nombre et une chaîne.
+                 Ce qui se passe, c’est que typescript va alors lancer une erreur à chaque fois que vous ne respectez pas ce contrat (par exemple si un paramètre d’une fonction est censé être un MyInterface, vous ne pouvez rien passer d’autre).
+              </p>
+
+              <img src="assets/images/div/interface.png" alt="" srcset="" class="mb-3 img-fluid">
+
+              <p>Le JavaScript traditionnel utilise des fonctions et un héritage basé sur un prototype pour construire des composants réutilisables, 
+                  mais cela peut sembler un peu gênant pour les programmeurs plus à l’aise avec une approche orientée objet, où les classes héritent des 
+                  fonctionnalités et les objets sont construits à partir de ces classes.</p>
+

@@ -1,0 +1,165 @@
+<div class="row">
+    <div class="col-md-2">
+
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Requêtes</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a routerLink='post' data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">POST requête</a>
+                </li>
+
+                <li>
+                    <a routerLink='get' data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">GET
+                        requête</a>
+                    <!-- <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="#">Page 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Page 2</a>
+                            </li>
+                            <li>src/app/appli/requests
+                                <a href="#">Page 3</a>
+                            </li> 
+                        </ul>-->
+                </li>
+                <div class="sidebar-header">
+                    <h3>Errors</h3>
+                </div>
+                <li>
+                    <a routerLink='throw-errors' data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">ThrowError</a>
+                </li>
+                <li>
+                    <a routerLink='errors-exception' data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Throw Error</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="col-md-10">
+        <h1>HttpClientmodule</h1>
+
+        <p>Ce module propose le service HttpClient qui s'importe dans n'importe quel constructeur.</p>
+        <p>Ce service réalise des requêtes AJAX avec XMLHttpRequest. Il propose plusieurs méthodes correspondant aux
+            verbes HTTP
+            communs qui retournent toutes des observables. Il permet d'accéder à une API Rest côté backend. Il a été
+            introduit avec angular 4.3.</p>
+
+            <p>Avant toute chose, il faut importer HttpClientModule dans le RootModule</p>
+
+        <ul class="list-group mb-3">
+            <li class="list-group-item">Il faut ajouter le HttpClientModule dans le tableau d'imports dans AppModule.
+            </li>
+            <li class="list-group-item">IL faut importer le service dans le composant ou le service : import HttpClient
+                from '@angular/common/http';</li>
+            <li class="list-group-item">Enfin on l'injecte dans le constructeur : constructor(public http: HttpClient)
+            </li>
+        </ul>
+
+        <p>La réponse du service httpClient sera donc toujours un observable, et l'on peut s'y abonner pour obtenir la
+            réponse. Le corps de la
+            réponse est directement émis par l’Observable :</p>
+        <p>N.B : Tous les observables renvoyés par les méthodes HttpClient sont dits "cold" par conception. L’exécution
+            de
+            la requête HTTP est reportée, vous permettant d’étendre l’observable avec des opérations supplémentaires
+            telles que tap et catchError avant que quoi que ce soit ne se produise.</p>
+        <p>Appeler <code>subscribe(...)</code> déclenche l’exécution de l’observable et fait que HttpClient compose et
+            envoie la requête HTTP au serveur.</p>
+        <p>En fait, chaque subscribe() lance une exécution séparée et indépendante de l’observable. S’abonner deux fois
+            entraîne deux requêtes HTTP.</p>
+            
+        <img src="assets/images/requests/requete.png" alt="" srcset="" class="mb-3 img-fluid">
+
+        <h2>Les requêtes HTTP</h2>
+
+        <p>Toutes les requêtes HTTP sont composées dune méthode "verbe" :</p>
+
+        <ul class="list-group mb-3">
+            <li class="list-group-item">get</li>
+            <li class="list-group-item">post</li>
+            <li class="list-group-item">put</li>
+            <li class="list-group-item">delete</li>
+            <li class="list-group-item">patch</li>
+            <li class="list-group-item">head</li>
+        </ul>
+
+        
+
+        
+        <h2>Les options</h2>
+
+        <p>Plusieurs possibilités sont possibles grâce à l'objet "options" pour configurer nos requêtes</p>
+        <img src="assets/images/requests/requestheader.png" alt="" srcset="" class="mb-3 img-fluid">
+
+        <ul class="list-group mb-3">
+            <li class="list-group-item"><span>headers : </span>permet d'ajouter des en-têtes HTTP de requêtes (headers)
+            </li>
+            <li class="list-group-item"><span>observe : </span>Utile si vous avez besoin de lire la réponse entière avec
+                les en-têtes et les codes d'état (status code). Pour cela on
+                définit la propriété observe à la réponse
+                <p>Les options autorisées sont :</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><span>response : </span>retourne la réponse entière</li>
+                    <li class="list-group-item"><span>body : </span>ne retourne que le corps de la requête</li>
+                    <li class="list-group-item"><span>events : </span>retourne la réponse avec les évènements</li>
+                </ul>
+            </li>
+            <li class="list-group-item"><span>params : </span>permet d'ajouter les paramètres d'url</li>
+            <li class="list-group-item"><span>reportProgress (booléen) : </span>permet de notifier l'utilisateur de
+                l'état d'avancement de la requête en cas de download d'une masse de données importante</li>
+            <li class="list-group-item"><span>responseType : </span>définit le type de la réponse qui est json par
+                défaut. Les autres types sont : ArrayBuffer, blob, JSON et text.</li>
+            <li class="list-group-item"><span>withcredentials (booléen) : </span>si true, httpClient.get envoie sa
+                requête avec des cookies.</li>
+        </ul>
+   
+        <h3>HttpHeaders : ajout d'en-têtes</h3>
+
+        <p>HttpHeaders est une classe helper dont les instances sont immutables : elle permet de configurer les en-têtes
+            de la requête. Crééons l'import dans notre service ou component pour l'utiliser.
+        </p>
+        <p>Syntaxe : la méthode get prend 2 paramètres : la partie générique de l'url à charger et un objet options pour
+            configurer la requête.
+        </p>
+
+
+        <img src="assets/images/requete1.png" alt="" srcset="" class="mb-3 img-fluid">
+
+        <p>Créons une instance de HttpHeaders :</p>
+        <img src="assets/images/requete2.png" alt="" srcset="" class="mb-3 img-fluid">
+        <p>Enfin, appelons httpClient.get() en lui passant les headers en paramètre</p>
+        <img src="assets/images/requete3.png" alt="" srcset="" class="mb-3 img-fluid">
+
+        <p>httpClient.get envoie la requête http à l'API et récupère le résultat au format souhaité (json par défaut).
+            Il faut spécifier le type pour un autre format.</p>
+
+        <h3>HttpParams : ajout de paramètres d'url</h3>
+
+        <p>HttpParams est une classe helper qui représente les paramètres sérialisés, selon le type MIME</p>
+        <p>Les requêtes HTTP peuvent également comporter des Request headers (des en-têtes). Il s’agit de données transmises en en-tête
+            de chaque requête ayant
+            différentes utilités. Dans certains cas, il faut spécifier certains headers, comme un Token d’autorisation
+            ou d’authentification.
+        </p>
+
+        <!-- <p>On peux accéder à la réponse HTTP complète. L’objet retourné est alors une
+            HttpResponse, avec quelques champs comme le champ status (code de la réponse), le champ headers,
+            etc.</p>
+        <img src="assets/images/obs3.png" alt="" srcset="">
+
+        <p>Envoyer des données est tout aussi trivial avec la méthode post à laquelle il faut passer l'objet en paramètre à envoyer. </p>
+        <img src="assets/images/obs4.png" alt="" srcset="">
+
+        <h4>Options avancées</h4>
+        <p>On peut ajuster ses requêtes plus finement grâce à un objet "options". L'option params représente les paramètres de recherche (les query strings
+            à ajouter à l'url).
+        </p>
+
+        <img src="assets/images/obs5.png" alt="" srcset=""> -->
+    </div>

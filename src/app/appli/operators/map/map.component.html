@@ -1,0 +1,26 @@
+<h1>map</h1>
+
+<p>L'opérateur map permet de créer un nouvel Observable à partir de l'Observable d'origine en transformant simplement chacune de ses valeurs.</p>
+
+<h4>map</h4>
+
+<p>L'operator map applique une fonction sur chaque élémentde l'observable. Comprend 2 pramètres :</p>
+<ul class="list-group">
+    <li class="list-group-item"><span>project : la fonction à appliquer sur chaque valeur émise par l'observable. Le paramètre index "i" est le nombre pour la énième émission
+         qui est survenue après la souscription.</span></li>
+    <li class="list-group-item"><span>this.Arg : optionnel (undefined par défaut) définit "this dans project fonction</span></li>
+</ul>
+<p>Un schéma vaut mieux qu'un long discours</p>
+<img src="assets/images/operators/map1.png" alt="" srcset="">
+
+<p>L'opérateur map retourne un Observable qui émet des valeurs modifiées par la fonction project à partir de l'Observable source</p>
+<p>Ne pas confondre avec Array.prototype.map qui agit de la même façon, mais sur les tableaux !</p>
+
+<img src="assets/images/operators/map.png" alt="" srcset="">
+
+    
+
+    
+   
+ 
+    

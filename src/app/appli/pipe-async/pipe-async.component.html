@@ -1,0 +1,27 @@
+<h3>le pipe async</h3>
+
+<p>Angular fournit un pipe spécial, appelé async. On l’utilise dans les templates pour s’abonner directement à un observable.</p>
+<p>Il y a plusieurs avantages :</p>
+
+<ul class="list-group">
+    <li class="list-group-item"><span>On peut stocker l'obsrvable directement  dans le composant sans avoir à s'y abonner manuellement.</span></li>
+    <li class="list-group-item"><span>Le pipe async s'occupe de se désabonner à la destruction du composant.</span></li>
+    <li class="list-group-item"><span>Il peut améliorer significativement les performances.</span></li>
+</ul>
+
+<p>Mais attention ! Prenons un composant qui retourne les caractéristiques d'une course (race)</p>
+<img src="assets/images/nsync1.png" alt="" srcset="">
+
+<p>Le code raceService.get() retourne un Observable de type RaceModel. On stocke cet Observable dans la variable this.race. Enfin on utilise race 2 fois
+    dans le template pour afficher le nom de la course et la date. Il est inutile de de s'abonner à l'observable.
+</p>
+
+<p>Le problème est que l'on s'abonne 2 fois à l'observable en appelant async 2 fois, ce qui déclenche 2 requêtes. </p>
+
+<p>la syntaxe "as" qui permet de résoudre le problème en ne s’abonnant qu’une seule fois et en stockant le résultat dans une variable du template :</p>
+<img src="assets/images/async2.png" alt="" srcset="">
+
+<p>Un autre exemple qui permet d'afficher l'heure en s'bonnant directement à l'observable.</p>
+<div>Time: {{ time | async }}</div>
+
+<img src="assets/images/requests/async3.png" alt="" srcset="" class="mb-3 img-fluid">

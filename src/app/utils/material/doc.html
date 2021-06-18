@@ -1,0 +1,53 @@
+<p>Documentation</p>
+
+MatCellDef extends CdkCellDef
+
+Cell definition for the mat-table. Captures the template of a column's data row cell as well as cell-specific properties.
+
+Selector: [matCellDef]
+MatHeaderCellDef extends CdkHeaderCellDef
+
+Header cell definition for the mat-table. Captures the template of a column's header cell and as well as cell-specific properties.
+
+Selector: [matHeaderCellDef]
+MatFooterCellDef extends CdkFooterCellDef
+
+Footer cell definition for the mat-table. Captures the template of a column's footer cell and as well as cell-specific properties.
+
+Selector: [matFooterCellDef]
+MatColumnDef extends CdkColumnDef
+
+Column definition for the mat-table. Defines a set of cells available for a table column.
+
+Selector: [matColumnDef]
+Properties
+Name 	Description
+@Input('matColumnDef')
+
+name: string
+	
+
+Unique name for this column.
+@Input()
+
+sticky: boolean
+	
+
+Whether sticky positioning should be applied.
+@Input('stickyEnd')
+
+stickyEnd: boolean
+	
+
+Whether this column should be sticky positioned on the end of the row. Should make sure that it mimics the CanStick mixin such that _hasStickyChanged is set to true if the value has been changed.
+
+cssClassFriendlyName: string
+	
+
+Transformed version of the column name that can be used as part of a CSS classname. Excludes all non-alphanumeric characters and the special characters '-' and '_'. Any characters that do not match are replaced by the '-' character.
+Methods
+hasStickyChanged
+
+Whether the sticky value has changed since this was last called.
+Returns
+boolean

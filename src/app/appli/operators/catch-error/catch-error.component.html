@@ -1,0 +1,53 @@
+<h1>catchError</h1>>
+
+<p>L'opérateur catchError comme son nom l'indique, capture (ou attrape) les erreurs sur l'observable à traiter en renvoyant une nouvelle observable
+    ou en lançant une erreur. L'operateur catchError retourne un observable qui provient de la source ou de l’observable retourné 
+    par la fonction selector de capture passée en paramètre.
+</p>
+
+<img src="assets/images/errors/catcherror.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Un seul paramètre :</p>
+
+<ul class="list-group">
+    <li class="list-group-item">selector : Une fonction qui prend l'erreur 'err' en argument et 'caught' qui est l'observable source pour
+        le cas où l'on souhaiterait 'retry' l'observable en la retournant à nouveau. N'importe quel observable retourné par le selector sera utilisé pour
+        continuer la chaîne observable.
+  </ul>
+
+<p>Etudions plusieurs cas de figure</p>
+
+  <p>- La fonction selector prend seulement l'erreur en paramètre. L'observable source continue avec un nouvel observable of('IV', 'V') lorsque 
+      l'erreur se produit (lorsque 'n' est égal à 2).
+  </p>
+  <img src="assets/images/errors/catcherror5.png" alt="" srcset="" class="mb-3 img-fluid">
+
+  <p>Souscription</p>
+  <img src="assets/images/errors/catcherror7.png" alt="" srcset="" class="mb-3 img-fluid">
+
+  <p>Sortie en console :</p>
+  <img src="assets/images/errors/catcherror8.png" alt="" srcset="" class="mb-3 img-fluid">
+
+
+
+  <p>- La fonction selector prend les 2 paramètres : erreur et caught.</p>
+<img src="assets/images/errors/catcherror9.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Souscription</p>
+  <img src="assets/images/errors/catcherror7.png" alt="" srcset="" class="mb-3 img-fluid">
+
+  <p>Sortie en console : la fonction take() qui équivaut à l'operator retry renouvelle la résolution de l'observable 10 fois (la capture d'ecran n'affiche
+      pas toutes les tentatives...)
+  </p>
+  <img src="assets/images/errors/catcherror10.png" alt="" srcset="" class="mb-3 img-fluid">
+
+
+   
+  <p>- La fonction selector prend seulement l'erreur en paramètre, et jette elle-même une erreur.</p>
+  <img src="assets/images/errors/catcherror11.png" alt="" srcset="" class="mb-3 img-fluid">
+
+  <p>Souscription : on utilise le callback d'erreur de l'observer pour afficher le message d'erreur.</p>
+  <img src="assets/images/errors/catcherror3.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Sortie en console :</p>
+<img src="assets/images/errors/catcherror12.png" alt="" srcset="" class="mb-3 img-fluid">

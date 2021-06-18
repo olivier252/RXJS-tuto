@@ -1,0 +1,63 @@
+<h1>Throw Error Vs throwError</h1>
+
+<p>Il est très facile de confondre l'operator 'ThrowError' avec 'Throw Error', mais ce n'est pas du tout la même chose !</p>
+<p>'Throw Error' jette une erreur, il s'agit d'un mécanisme Javascript et non de RxJS. Il faut utiliser les blocs 'Try/Catch' pour attraper 
+    les erreurs.
+</p>
+<p>Cependant, RxJS utilise les blocs 'Try/Catch' pour récupérer les erreurs émises par les observables, et quand ils en attrapent une, ils émettent
+    une notification d'erreur et déclenchent le callback d'erreur et alors l'observable s'interrompt.
+</p>
+
+<p>A contrario ThrowError ne jette pas d'erreur, il émet un observable de notification d'erreur en déclenchant le callback d'erreur, puis s'arrête.</p>
+
+<h3>Throw Error</h3>
+<p>Observons lecomportement de Throw Error ci-dessous :</p>
+<p>Quand l'operator map reçoit la valeur 'toto' il utilise 'Throw Error' pour jeter une erreur. L'observable la capture et lève une notification d'erreur 
+    avant de se terminer. La valeur attendue '8' après 'toto' n'est jamais émise.
+</p>
+<img src="assets/images/errors/throwerror3.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Sortie en console du code ci-dessus</p>
+<img src="assets/images/errors/throwerror4.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Reprenons notre exemple avec ThrowError. Tout ce que nous avons à faire est de modifier le code de la condition de l'observable 'myObs2' comme ceci :</p>
+<img src="assets/images/errors/throwerror5.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Cette fois la sortie en console donne :</p>
+<img src="assets/images/errors/throwerror6.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Que remarquons-nous ?</p>
+
+<ul class="list-group mb-3">
+    <li  class="list-group-item">- L'observable émet les valeurs 2 et 4</li>
+    <li  class="list-group-item">- Quand l'operator map reçoit la valeur 'toto' il devrait retourner throwError. Mais rappelons que
+        ThrowError retourne un observable, et il ne levera une erreur que si l'on y souscrit. Ici, l'operator map ne souscrit pas 
+    à l'observable, il la retourne à l'observer. Par conséquent, l'observer reçoit l'observable throwError comme une valeur</li>
+    <li  class="list-group-item">- Comme aucune erreur n'est levée, l'observable continue elle émet la dernière valeur '8' et se complète</li>
+</ul>
+
+<h3>Utiliser ThrowError</h3>
+
+<p>Il faut donc souscrire à throwError si l'on souhaite émettre une notification d'erreur. On peut utiliser cet operator avec les autres operators mergeMap, 
+    switchMap et catchError.
+</p>
+
+<h5>- Avec catchError</h5>
+
+<img src="assets/images/errors/catcherror13.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Puis on souscrit :</p>
+<img src="assets/images/errors/catcherror15.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Sortie console :</p>
+<img src="assets/images/errors/throwerror7.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Le code jette une erreur dans l'operator map</p>
+<p>Le rôle de CatchError est de l'attraper afin de la gérer. Une fois l'erreur traitée, il faut retourner une observable. 
+Nous pouvons soit retourner un observable "de remplacement", soit une erreur. L'observable retournée par CatchError est immédiatement souscrit.</p>
+
+<h5>- Avec mergeMap</h5>
+
+<p>L'operator mergeMap mappe chaque valeur de l'observable source en une observable interne, y souscrit, puis commence
+    à émettre des valeurs.
+</p>

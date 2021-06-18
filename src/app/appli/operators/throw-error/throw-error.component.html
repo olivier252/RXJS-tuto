@@ -1,0 +1,18 @@
+<h1>ThrowError</h1>
+
+<p>Angular ThrowError operator retourne un observable de type Observable&lt;never&gt; sous la forme d'une notification d'erreur fournie par
+    l'argument "error". 
+    Lors de la souscription, il n’émet aucun résultat.
+
+<img src="assets/images/operators/throwerror.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>Les paramètres sont les suivants :</p>
+
+<ul class="list-group">
+    <li class="list-group-item">error : l'erreur à passer lors de la notification.</li>
+    <li class="list-group-item">scheduler : optionnel et "undefined" par défaut. Utilsé pour programmer l'émission de la notification d'erreur.</li>
+  </ul>
+
+  <p>Il s'agit d'un operator statique qui peut être utilisé avec d'autres observables comme "mergeMap", confère exemple ci-dessous :</p>
+
+  <img src="assets/images/operators/throwerror2.png" alt="" srcset="" class="mb-3 img-fluid">

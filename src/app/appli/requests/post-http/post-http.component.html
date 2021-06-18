@@ -1,0 +1,171 @@
+<h1 class="mb-5">Requêtes POST</h1>
+
+<p>Le formulaire suivant illustre le fonctionnement de post.request en cliquant sur le bouton "ajouter une personne"</p>
+<p>Cel ajoute une ligne au tableau créé avec la librairie "Angular Material"</p>
+
+<h2 class="ml-10 mb-5">Formulaire test</h2>
+
+<div>
+  <form #f="ngForm" (ngSubmit)="addPerson()">
+
+    <div class="form-group">
+      <label for="name">Nom</label>
+      <input type="text" class="form-control" name="name" id="name" [(ngModel)]="person.name" />
+    </div>
+
+    <div class="form-group">
+      <label for="age">Age</label>
+      <input type="number" class="form-control" name="age" id="age" [(ngModel)]="person.age" />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Ajouter une personne</button>
+    </div>
+  </form>
+</div>
+
+<h2>Table style Material Angular</h2>
+
+<!-- /////////////////////////////////////TUTO DATATABLE /////////////////////////////////////-->
+<!-- 
+- on peut refresh grace à renderRows()
+- on obtient à la table en utilisant ViewChild. Un type T est requis pour la table
+- Il faut enfin appeler la méthode renderRows() lorsque l'on modifie la table 
+-->
+<!-- 
+  - Nous crééons une table basique
+  - Ajout de champs d'entrée dynamiques basés sur le modèle de données (cf interface)
+ -->
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumns">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span *ngIf="column !== 'edit'">
+        {{ column }}
+      </span>
+    </th>
+    <td mat-cell *matCellDef="let person">
+      <div *ngIf="column === 'edit'; spanHeader" class="btn-edit">
+        <button class="mg-button" mat-raised-button color="primary" (click)="openDialog(person)">Edit</button>
+        <button class="mg-button" mat-raised-button color="warn" (click)="deletePerson(person.id)">Delete</button>
+        <a mat-raised-button [routerLink]="[ person.id]">Detail</a>
+      </div>
+      <span #spanHeader>
+        {{ person[column] }}
+      </span>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+<hr>
+
+<p>Code correspondant du formulaire ci-dessus :</p>
+<img src="assets/images/div/form.png" alt="" srcset="" class="mb-3 img-fluid">
+
+<p>A chaque ajout d'un élément de type 'Person' à l'aide du formulaire, la méthode <code>addPerson()</code> est appelée
+  grâce à la directive <code>ngSubmit</code>.</p><br>
+
+<figure>
+  <img src="assets/images/requests/requeteAddTs.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption>Chaque appel de <code>addPerson()</code> appelle lui-même une autre méthode, la bien nommée
+    <code>addPersonService</code> dans notre service
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="assets/images/requests/post.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption>Enfin la requête de type <code>post</code></figcaption>
+</figure>
+
+<hr>
+
+<h2 class="mb-5 mt-5">Ajout de headers</h2>
+<p>De nombreux serveurs nécessitent des en-têtes supplémentaires pour les opérations de sauvegarde. Par exemple, un
+  serveur peut avoir besoin d’un jeton d’autorisation, ou d’un en-tête "Content-Type" pour déclarer explicitement le
+  type MIME du corps de la requête.</p><br>
+
+<figure>
+  <img src="assets/images/requests/headersRequet.png" alt="" srcset="" class="mb-3 img-fluid">
+  <figcaption>Ici on spécifie que notre requête envoie des données au format <code>Json</code>. elle fournit églement un
+    jeton d'identification.</figcaption>
+</figure>
+
+<p>Cependant on ne peut pas modifier directement les en-têtes (headers) existants dans l’objet options précédent car les
+  instances de la classe HttpHeaders sont immuables. Utilisez la méthode set() à la place, pour retourner un clone de
+  l’instance courante avec les nouvelles modifications appliquées.</p><br>
+<p>Voici comment il faudrait procéder pour modifier les en-têtes :</p>
+
+<figure>
+  <img src="assets/images/requests/requestHeaders.png" alt="" srcset="" class="mb-3 img-fluid">
+</figure>
+
+<!-- 
+Des cas d’utilisation plus complexes peuvent bénéficier d’une approche plus flexible impliquant un flux observable ou en 
+encapsulant la logique de votre source de données dans une classe DataSource.
+
+Flux observable de tableaux de données
+
+Une autre approche pour fournir des données à la table est de passer un flux observable qui émet le tableau de données à afficher chaque 
+fois qu’il est modifié. La table écoutera ce flux et déclenchera automatiquement une mise à jour des lignes chaque fois qu’un nouveau 
+tableau de données est émis.
+
+Pour la plupart des applications du monde réel, fournir une instance DataSource à la table sera le meilleur moyen de gérer les données. 
+Le DataSource est destiné à servir d’endroit pour encapsuler toute logique de tri, de filtrage, de pagination et de récupération de 
+données spécifique à l’application.
+
+Une DataSource est simplement une classe qui a au minimum les méthodes suivantes : connect et disconnect. La méthode connect sera appelée 
+par la table pour fournir un Observable qui émet le tableau de données qui doit être rendu. La table appellera disconnect lorsque la table 
+est détruite, ce qui peut être le bon moment pour nettoyer tous les abonnements qui peuvent avoir été enregistrés dans la méthode connect.
+
+Bien que Angular Material fournisse une classe DataSource prête à l’emploi, MatTableDataSource, vous pouvez créer votre propre classe 
+DataSource personnalisée pour des cas d’utilisation plus complexes. Cela peut être fait en étendant la classe abstraite DataSource avec une 
+classe DataSource personnalisée qui implémente ensuite les méthodes connect et disconnect. Pour les cas d’utilisation où la DataSource 
+personnalisée doit également hériter de la fonctionnalité en étendant une classe de base différente, la classe de base DataSource peut être 
+implémentée à la place (MyCustomDataSource étend SomeOtherBaseClass implémente DataSource) respecter la restriction de Typescript pour 
+n’implémenter qu’une seule classe de base.
+
+La MatTable est axée sur une seule responsabilité : rendre les lignes de données de manière efficace et accessible.
+
+Vous remarquerez que le tableau lui-même ne sort pas de la boîte avec beaucoup de fonctionnalités, mais s’attend à ce que le tableau sera 
+inclus dans une composition de composants qui remplit ses fonctionnalités.
+
+Par exemple, vous pouvez ajouter le tri et la pagination à la table en utilisant MatSort et MatPaginator et en mutant les données 
+fournies à la table en fonction de leurs sorties.
+
+Pour simplifier le cas d’utilisation d’une table qui peut trier, paginer et filtrer un tableau de données, la bibliothèque Matériel 
+angulaire est livrée avec une MatTableDataSource qui a déjà implémenté la logique de déterminer quelles lignes doivent être rendues 
+selon l’état courant de la table. Pour ajouter ces fonctions au tableau, consultez les sections correspondantes ci-dessous.
+   -->
+
+
+   <!-- TEST MENU PENSER À EFFACER -->
+
+   <div class="flex">
+
+   <button mat-button [matMenuTriggerFor]="aboveMenu">Above</button>
+   <mat-menu #aboveMenu="matMenu" yPosition="above">
+     <button mat-menu-item>Item 1</button>
+     <button mat-menu-item>Item 2</button>
+   </mat-menu>
+   
+   <button mat-button [matMenuTriggerFor]="belowMenu" class="ta-mere">Below</button>
+   <mat-menu #belowMenu="matMenu" yPosition="below">
+     <button mat-menu-item>Item 1</button>
+     <button mat-menu-item>Item 2</button>
+   </mat-menu>
+   
+   <button mat-button [matMenuTriggerFor]="beforeMenu">Before</button>
+   <mat-menu #beforeMenu="matMenu" xPosition="before">
+     <button mat-menu-item>Item 1</button>
+     <button mat-menu-item>Item 2</button>
+   </mat-menu>
+   
+   
+   <button mat-button [matMenuTriggerFor]="afterMenu">After</button>
+   <mat-menu #afterMenu="matMenu" xPosition="after">
+     <button mat-menu-item>Item 1</button>
+     <button mat-menu-item>Item 2</button>
+   </mat-menu>
+  </div>

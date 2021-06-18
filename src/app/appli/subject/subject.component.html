@@ -1,0 +1,72 @@
+<h3>Les subjects</h3>
+
+<p>Les subjects sont un type spécial d'observable qui permet aux valeurs émises d'être multicastes auprès de nombreux observers. 
+En revanche les observables simples sont unicastes : chaque observer (abonné) possède une exécution indépendante de l'observable.</p>
+
+<p>Les subjects ressemblent aux EventEmitters : ils maintiennent et mettent à jour plusieurs listeners</p>
+<p>Chaque subject est à la fois un observable et un observer. On peut y souscrire en fournissant un observer qui commencera à recevoir des valeurs 
+    normalement.
+</p>
+<p>Cependant, l'observer ne peut pas savoir si l'exécution de l'observable provient d'un observable ou bien d'un subject.</p>
+
+<p>subscribe() n’invoque pas une nouvelle exécution qui fournit des valeurs. Il enregistre simplement l’Observer donné dans une liste 
+    d’Observers, de la même manière que addListener fonctionne habituellement dans d’autres bibliothèques et langues.</p>
+
+<p>Chaque subject est un observer, c'est un objet qui possède donc 3 méthodes :
+
+<ul class="list-group">
+    <li class="list-group-item"><span>next(value) : </span></li>
+    <li class="list-group-item"><span>error(e) : </span></li>
+    <li class="list-group-item"><span>compete() : </span></li>
+</ul>
+
+<p>Pour fournir une nouvelle valeur au subject, il faut appeler la méthode next("laValeur"). Cette valeur sera ensuite multicastée aux observers 
+    enregistrés pour écouter le subject.
+</p>
+
+<p>Ci-dessous, nous avons 2 observers abonnés au subject et nous fournissons 2 valeurs au Subject</p>
+<p>Du coup, dans ce cas, le subject se comporte comme un observable, il REÇOIT des valeurs.</p>
+
+<img src="assets/images/subject4.png" alt="" srcset="">
+
+<!-- <p>Résultat valeur de l'observer A : {{ observerA }}</p>
+<p>Résultat valeur de l'observer B : {{ observerB }}</p> -->
+
+<p>Comme un subject est un observer, on peut fournir un subject en argument à la méthode subscribe d'un observable</p>
+
+<img src="assets/images/subject2.png" alt="" srcset="">
+
+<p>Cette approche permet de convertir un observable par nature unicast en multicast grâce au subject. Cela démontre combien les subjects sont 
+    le seul moyen de partager l'exécution de l'observable auprès de mutiples observers.
+</p>
+
+<p>Un observable multicast transmet des notifications à travers un subject qui peut avoir de nombreux observers (abonnés), alors qu'un observable unicast 
+    n'envoie des notifications qu'à un seul observateur. Un observable multicast utilise un subject pour montrer à plusieurs observers LA MÊME exécution d'un observable
+</p>
+
+<p>Un observable peut utiliser l’opérateur multicast et un subject pour avoir plusieurs observateurs. Il devient ainsi un ConnectableObservable et utilise
+    la méthode connect() pour notifier les changements aux observers.
+</p>
+<p>Il y a un operateur multicast sous le capot : les observers s'abonnent au subject et le subject s'abonne à la source observable. L'exemple suivant est similaire 
+    à l'exemple précédent qui utilisait observable.subscribe(subject).
+</p>
+
+<h3>BehaviorSubject</h3>
+
+<p>Il doit être initialisé avec une valeur par défaut. car la principale caractéristique est de toujours devoir retourner une valeur aux observateurs. 
+    Lors de la souscription, l'objet retourne la dernière valeur qu'il possède. Elle notifie ensuite les observateurs de la même manière qu'un observable.
+</p>
+
+<p>Ce type de subject conserve la dernière valeur émise au consommateur de données, et si nous souscrivons à un nouvel observer pour le behaviorSubject, 
+    il recevra cette valeur immédiatement. Nous pouvons également passer la valeur initiale au behaviorSubject lorsque nous le définissons.
+</p>
+
+<p>il est possible d'obtenir la valeur d'un objet de la classe "BehaviorSubject" à partir de n'importe quel emplacement de code non observable 
+    grâce à la méthode "getValue()".
+</p>
+<p>Il est possible de créer des objets observables seulement à partir des deux classes "Subject" et "BehaviorSubject" grâce à la méthode "asObservable()". 
+    Les objets créés avec cette méthode ne peuvent pas utiliser la méthode "next()" pour changer la valeur mais permettent ainsi de cacher 
+    l'identité de l'objet qui les a créés.
+</p>
+Les subjects comme les Observables peuvent émettre plusieurs valeurs d’événements. Cependant, les subjects permettent aux abonnés de repousser 
+ou de déclencher leurs propres événements sur le sujet avec l'abonné next(). 

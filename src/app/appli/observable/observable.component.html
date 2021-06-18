@@ -1,0 +1,78 @@
+<h3>Push model et pull Model</h3>
+<p>Fonctionne sur la base d'un data producer et d'un data consumer.</p>
+<p>- Dans le push model c'est le data producer le plus important. Il décide quand envoyer les datas au consumer. Les promises sont des datas producer
+qui envoient des infos aux callbacks. Une promesse est un calcul non "lazy" qui peut (ou ne peut pas) renvoyer une seule valeur.
+</p>
+<p>- Dans le pull model, le plus important est le data consumer, il décide quand recevoir les infos. Les fonctions et les observables sont un exemple de pull model.
+    Une fonction, une observable est évaluée de manière "lazy" c'est-à-dire qu'elle retourne une valeur de manière synchrone que si elle est invoquée ou appelée (lazy loading)
+</p>
+
+<h3>Les observables</h3>
+    <p>Un observable est un flux d'évènements auquel on peut s'abonner. Elles sont génériques.</p>
+    <p>Les observables permettent de gérer les données asynchrones. Ils sont comme un tableau d'items qui arrivent en différé à travers le temps.</p>
+    <p>Ils possèdent une liste d'observers auxquels ils notifient tout changement en appelant leurs méthodes</p>
+    
+    <img src="assets/images/obs10.png" alt="" srcset="">
+    <p>Le constructeur de l'observable prend une fonction en paramètre, et cette fonction possède un objet subscriber ou observer, c'est un data consumer
+        qui consomme les valeurs délivrées par l'observable.
+        <figure>
+            <img src="assets/images/obs11.png"
+                 alt="Structure de l'objet observer">
+            <figcaption>Structure de l'objet observer</figcaption>
+        </figure>
+
+    <p>Un observer possède 3 propriétés : next, error et complete dont les valeurs sont des callbacks. Il y a donc un observer passé en paramètre quand on créé un
+        observable à partir d'une instance de la classe Observable.
+    </p>
+
+    <h4>Souscrire à un observable</h4>
+
+    <p>La souscription est un objet (objet Subscription) représente une ressource disponible. Quand l'observable est exécutée, la souscription intègre les ressources de l'observable.
+        L'objet "Subscription" possède la méthode unsubscribe qui permet de supprimer ces ressources à la fin du cycle de vie du composant.
+    </p>
+
+    <p>Pour invoquer l'observable, il faut y souscrire via la méthode subscribe() qui ajout comme l'appel d'une fonction classique. On passe l'observer en paramatètre
+        de subscribe(). C'est le callback next(value) qui détermine comment est utilisée la valeur qui est passée à l'observable.
+    </p>
+
+    <p>En résumé, les subscribers s'abonnent à l'observable et réagissent à chaque changement de valeur de l'observable. La méthode subscribe peut prendre 3 méthodes en argument.
+        L'observable peut avoir plusieurs abonnés qui sont notifiés de l'état de changement de l'observable.
+    </p>
+    <p>Quand un abonné souscrit à un observable, il est possible d'utiliser les 3 callbacks next(), error() et complete(). L'observable va invoquer next() quand il reçoit une valeur.
+        Si l'observable se termine, il utilse le callback complete(), et le callback d'erreur en cas de problème.
+    </p>
+    
+
+<h4>Quelle est la différence entre une fonction est une observable ?</h4>      
+    <p class="mb-0">Les observables peuvent retourner plusieurs valeurs à travers le temps, alors que les fonctions ne le peuvent pas. confère l'exemple ci-dessous</p>
+    <img src="assets/images/img1.png" alt="" srcset="">
+    <p class="mb-0">Mon observable renvoie les valeurs suivantes : {{ valueMyObs }}</p>
+
+    <div class="card card-body">
+        <p>{{ completeMessage }}</p>
+    </div>
+
+    <div class="card card-body">
+        <p>Vous êtes connecté(e) depuis {{ count }} secondes</p>
+    </div>
+    
+    <button class="btn btn-primary" type="button" (click)="emitTimeConnexFromButton()" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Affiche temps de connexion
+    </button>
+    
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            Vous êtes connecté(e) depuis {{ countInButton }} secondes
+        </div>
+    </div>
+
+    <h4>Dans quels cas utiliser les observables ?</h4>
+
+    <p>Application aux requêtes HTTP</p>
+    <p>Voici 3 cas d'utilisation concrêts, comme par exemple :</p>
+    <ul class="list-group">
+        <li class="list-group-item"><span>Le module HttpClient</span></li>
+        <li class="list-group-item"><span>Le module de gestion des routes quand l'url change</span></li>
+        <li class="list-group-item"><span>La gestion des formulaires</span></li>
+    </ul>
+
